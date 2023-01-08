@@ -41,9 +41,19 @@ void MainWindow::digits_numbers()
 {
     QPushButton *button =(QPushButton *) sender();
     double all_numbers;
+    QString new_string;
 
-    all_numbers = (ui->result_show->text() + button->text()).toDouble();
-    output(all_numbers);
+
+    if(ui->result_show->text().contains(".") && button->text() == "0"){
+        new_string = ui->result_show->text() + button->text();
+        ui->result_show->setText(new_string);
+    }else{
+        all_numbers = (ui->result_show->text() + button->text()).toDouble();
+        output(all_numbers);
+    }
+    if(ui->result_show->text().size() != 0){
+        ui->pushButton_del->setText("C");
+    }
 }
 
 void MainWindow::on_pushButton_comma_clicked()
@@ -78,6 +88,7 @@ void MainWindow::math_operations()
     QPushButton *button =(QPushButton *) sender();
 
     num_first = ui->result_show->text().toDouble();
+    ui->result_show->setText("");
 
     button->setChecked(true);
 
@@ -86,7 +97,14 @@ void MainWindow::math_operations()
 
 void MainWindow::on_pushButton_del_clicked()
 {
+    ui->pushButton_plus->setChecked(false);
+    ui->pushButton_minus->setChecked(false);
+    ui->pushButton_divide->setChecked(false);
+    ui->pushButton_multiply->setChecked(false);
 
+    ui->pushButton_del->setText("AC");
+
+    ui->result_show->setText("0");
 }
 
 
@@ -104,10 +122,31 @@ void MainWindow::on_pushButton_equals_clicked()
         ui->pushButton_plus->setChecked(false);
 
     } else if(ui->pushButton_minus->isChecked()){
+        lableNumber = num_first - num_second;
+
+        output(lableNumber);
+
+        ui->pushButton_plus->setChecked(false);
 
     } else if(ui->pushButton_divide->isChecked()){
 
+        if(num_second == 0){
+            ui->result_show->setText("Error");
+        } else{
+            lableNumber = num_first / num_second;
+
+            output(lableNumber);
+
+            ui->pushButton_plus->setChecked(false);
+        }
+
     } else if(ui->pushButton_multiply->isChecked()){
+
+        lableNumber = num_first * num_second;
+
+        output(lableNumber);
+
+        ui->pushButton_plus->setChecked(false);
 
     }
 
